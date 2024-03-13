@@ -1,44 +1,19 @@
-# alcohol/views.py
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Drink, DailyGoal
-from .forms import DrinkForm, DailyGoalForm
+from django.shortcuts import render
+from .forms import AlcoholForm
 
 
-class DrinkListView(ListView):
-    model = Drink
-    context_object_name = 'drinks'
-    template_name = 'alcohol/drink_list.html'
-
-
-class DrinkCreateView(CreateView):
-    model = Drink
-    form_class = DrinkForm
-    success_url = reverse_lazy('drink_list')
-    template_name = 'alcohol/drink_form.html'
-
-
-class DrinkUpdateView(UpdateView):
-    model = Drink
-    form_class = DrinkForm
-    success_url = reverse_lazy('drink_list')
-    template_name = 'alcohol/drink_form.html'
-
-
-class DrinkDeleteView(DeleteView):
-    model = Drink
-    success_url = reverse_lazy('drink_list')
-    template_name = 'alcohol/drink_confirm_delete.html'
-
-
-def daily_goal_view(request):
+def calculate_alcohol(request):
     if request.method == 'POST':
-        form = DailyGoalForm(request.POST)
+        form = AlcoholForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('drink_list')
+            total_alcohol = 0
+            for i in range(1, 6):
+                alcohol_percentage = form.cleaned_data[f'alcohol_percentage_{i}']
+                volume_ml = form.cleaned_data[f'volume_ml_{i}']
+                # アルコールの総量を計算
+                total_alcohol += (alcohol_percentage * volume_ml) / 100
+
+            return render(request, 'result.html', {'total_alcohol': total_alcohol, 'form': form})
     else:
-        form = DailyGoalForm()
-    return render(request, 'alcohol/daily_goal.html', {'form': form})
+        form = AlcoholForm()
+    return render(request, 'alcohol_form.html', {'form': form})
