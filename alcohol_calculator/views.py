@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+
 from .forms import AlcoholForm
 
 
@@ -16,4 +18,4 @@ def calculate_alcohol(request):
             return render(request, 'result.html', {'total_alcohol': total_alcohol, 'form': form})
     else:
         form = AlcoholForm()
-    return render(request, 'alcohol_form.html', {'form': form})
+    return render(request, 'alcohol_calculator/alcohol_form.html', {'form': form})
