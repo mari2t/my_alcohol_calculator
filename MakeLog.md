@@ -1,5 +1,11 @@
 # MakeLog
 
+## 2024/6/22
+
+1. 3ヵ月ぶりに起動したけど起動方法を忘れていた…。
+2. 起動はmanage.py があるフォルダでpython manage.py runserver
+3. 起動はするけど画面はPage not found (404)
+
 ## 2024/3/14
 
 1. 昨日のエラーはURLの設定ミスだった
